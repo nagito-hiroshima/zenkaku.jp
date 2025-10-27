@@ -166,7 +166,10 @@
         <header>
             <div>
                 <h1>入力文字を全角に変換</h1>
-                <p>右側に入力、左側に変換結果を表示します。英数字・記号・スペースを全角に変換します。</p>
+                <p>左側に入力、右側に変換結果を表示します。英数字・記号・スペースを全角に変換します。</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn ghost" id="switchBtn" title="半角変換ツール（hankaku.jp）を新しいタブで開く">半角変換へ</button>
             </div>
         </header>
 
@@ -229,6 +232,16 @@
         const copyBtn = document.getElementById('copyBtn');
         const downloadBtn = document.getElementById('downloadBtn');
         const clearOutputBtn = document.getElementById('clearOutputBtn');
+
+        // ここから追加
+        const switchBtn = document.getElementById('switchBtn');
+        if (switchBtn) {
+            switchBtn.addEventListener('click', () => {
+                // 同じタブで遷移
+                window.location.href = 'https://hankaku.jp/';
+            });
+        }
+        // ここまで追加
 
         convertBtn.addEventListener('click', () => {
             const value = inputEl.value;
