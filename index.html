@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全角変換ツール</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --card: #ffffff;
+            --accent: #5569ff;
+            --muted: #6b7280;
+            --glass: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: "Noto Sans JP", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            margin: 0;
+            padding: 36px;
+            background:
+                linear-gradient(180deg, #eef2ff 0%, var(--bg) 100%);
+            color: #111827;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(20, 30, 80, 0.08);
+            padding: 18px;
+            overflow: hidden;
+        }
+
+        .cols {
+            display: flex;
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        /* 左：結果、右：入力 */
+        .output,
+        .input {
+            padding: 16px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, rgba(86, 101, 255, 0.04), rgba(86, 101, 255, 0.01));
+            flex: 1;
+            min-height: 240px;
+        }
+
+        .output {
+            flex: 1.1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        textarea#inputText {
+            width: 100%;
+            min-height: 260px;
+            resize: vertical;
+            padding: 14px;
+            font-size: 1rem;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            border-radius: 8px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(245, 247, 255, 0.6));
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            font-family: inherit;
+            line-height: 1.6;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            border: 0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            background: var(--accent);
+            box-shadow: 0 6px 18px rgba(85, 105, 255, 0.18);
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid rgba(85, 105, 255, 0.12);
+            box-shadow: none;
+        }
+
+        .result-box {
+            flex: 1;
+            padding: 14px;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #ffffff, rgba(245, 247, 255, 0.6));
+            border: 1px solid rgba(15, 23, 42, 0.04);
+            font-size: 1rem;
+            color: #0b1220;
+            white-space: pre-wrap;
+            overflow: auto;
+            min-height: 200px;
+        }
+
+        @media (max-width:880px) {
+            .cols {
+                flex-direction: column-reverse;
+            }
+
+            .input textarea {
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <div>
+                <h1>入力文字を全角に変換</h1>
+                <p>右側に入力、左側に変換結果を表示します。英数字・記号・スペースを全角に変換します。</p>
+            </div>
+        </header>
+
+        <section class="card">
+            <div class="cols">
+
+
+                <!-- 右: 入力 -->
+                <div class="input">
+                    <label for="inputText">入力（ここにテキストを入力）</label>
+                    <textarea id="inputText" placeholder="ここにテキストを入力してください（複数行可）"></textarea>
+
+                    <div class="controls">
+                        <button class="btn" id="convertBtn">変換</button>
+                        <button class="btn ghost" id="clearBtn">クリア</button>
+                        <div style="flex:1"></div>
+                        <span class="hint">日本語はそのまま保持します</span>
+                    </div>
+                </div>
+
+
+                <!-- 左: 出力 -->
+                <div class="output" aria-live="polite">
+                    <label for="resultText">変換結果</label>
+                    <div id="resultText" class="result-box" role="region" aria-label="変換結果"></div>
+
+                    <div style="display:flex;gap:8px; margin-top:8px;">
+                        <button class="btn" id="copyBtn">コピー</button>
+                        <button class="btn ghost" id="downloadBtn">ダウンロード (.txt)</button>
+                        <button class="btn ghost" id="clearOutputBtn">出力をクリア</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function toFullWidth(text) {
+            let out = '';
+            for (let char of text) {
+                const code = char.charCodeAt(0);
+                // スペース
+                if (code === 32) {
+                    out += String.fromCharCode(12288);
+                }
+                // 半角英数字・記号 33(!)〜126(~)
+                else if (code >= 33 && code <= 126) {
+                    out += String.fromCharCode(code + 65248);
+                } else {
+                    out += char;
+                }
+            }
+            return out;
+        }
+
+        const inputEl = document.getElementById('inputText');
+        const resultEl = document.getElementById('resultText');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const clearOutputBtn = document.getElementById('clearOutputBtn');
+
+        convertBtn.addEventListener('click', () => {
+            const value = inputEl.value;
+            resultEl.textContent = toFullWidth(value);
+        });
+
+        clearBtn.addEventListener('click', () => { inputEl.value = ''; inputEl.focus(); });
+        clearOutputBtn.addEventListener('click', () => { resultEl.textContent = ''; });
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(resultEl.textContent || '');
+                copyBtn.textContent = 'コピー済み';
+                setTimeout(() => copyBtn.textContent = 'コピー', 1500);
+            } catch (e) {
+                alert('コピーに失敗しました。ブラウザのクリップボード権限を確認してください。');
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const blob = new Blob([resultEl.textContent || ''], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'zenkaku.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Ctrl+Enter で変換
+        inputEl.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                convertBtn.click();
+            }
+        });
+    </script>
+</body>
+<footer>
+
+    <div style="text-align:center; margin-top:24px; color:var(--muted); font-size:0.9rem;" id="footer">
+        &copy; <span id="year"></span> 全角変換ツール
+    </div>
+    <script>
+        const year = new Date().getFullYear();
+        document.getElementById('footer').innerHTML=`&copy;${year} 全角変換ツール<br><a href="https://moenaigomi.com/" target="_blank" rel="noopener" style="color:var(--muted); text-decoration:underline;">moenaigomi.com</a>`;
+    </script>
+</footer>
+
+</html>
