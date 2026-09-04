@@ -55,6 +55,42 @@
             font-size: 0.95rem;
         }
 
+        .api-notice {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 18px;
+            padding: 16px 18px;
+            border: 1px solid rgba(85, 105, 255, 0.16);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(85, 105, 255, 0.12), rgba(255, 255, 255, 0.88));
+            box-shadow: 0 6px 20px rgba(20, 30, 80, 0.06);
+        }
+
+        .api-notice strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #2435b5;
+        }
+
+        .api-notice p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .api-link {
+            flex-shrink: 0;
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #ffffff;
+            background: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 6px 18px rgba(85, 105, 255, 0.18);
+        }
+
         .card {
             background: var(--card);
             border-radius: 12px;
@@ -151,6 +187,15 @@
         }
 
         @media (max-width:880px) {
+            .api-notice {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .api-link {
+                text-align: center;
+            }
+
             .cols {
                 flex-direction: column-reverse;
             }
@@ -173,6 +218,14 @@
                 <button class="btn ghost" id="switchBtn" title="半角変換ツール（hankaku.jp）を新しいタブで開く">半角変換へ</button>
             </div>
         </header>
+
+        <aside class="api-notice" aria-label="公開APIのお知らせ">
+            <div>
+                <strong>公開API機能を追加しました</strong>
+                <p>全角変換を外部のWebサイトやアプリから無料で利用できます。</p>
+            </div>
+            <a class="api-link" href="/api.html">APIの利用方法・ルールを見る</a>
+        </aside>
 
         <section class="card">
             <div class="cols">
