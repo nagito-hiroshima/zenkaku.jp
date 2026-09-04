@@ -55,6 +55,19 @@
             font-size: 0.95rem;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .api-nav-link {
+            padding: 7px 10px;
+            font-size: 0.82rem;
+            line-height: 1;
+            text-decoration: none;
+        }
+
         .api-notice {
             display: flex;
             align-items: center;
@@ -215,7 +228,8 @@
                 <p>左側に入力、右側に変換結果を表示します。英数字・記号・スペースを全角に変換します。</p>
             </div>
             <div class="header-actions">
-                <button class="btn ghost" id="switchBtn" title="半角変換ツール（hankaku.jp）を新しいタブで開く">半角変換へ</button>
+                <a class="btn ghost api-nav-link" href="/api.html" aria-label="公開APIの利用方法を見る">API</a>
+                <button class="btn ghost" id="switchBtn" title="半角変換ツール（hankaku.jp）を開く">半角変換へ</button>
             </div>
         </header>
 
